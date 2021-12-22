@@ -33,7 +33,7 @@
                 <use xlink:href="../assets/icon/user.svg#user"></use>
               </svg>
             </a>
-            <router-link to="/payment">
+            <router-link to="/cart">
               <svg width="24" height="24">
                 <use xlink:href="../assets/icon/basket.svg#basket"></use>
               </svg>

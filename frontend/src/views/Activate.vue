@@ -1,8 +1,5 @@
 <template>
   <main class="activate">
-    <!-- {{$route.params.code}}
-    {{$route.params.token}}
-    <button class="appBtn appBtn--meduim">Войти</button>  -->
   </main>
 </template>
 

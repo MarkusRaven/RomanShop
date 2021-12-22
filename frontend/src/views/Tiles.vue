@@ -18,23 +18,7 @@
             <AppFilter @filterItems="UpdateItems($event)" :Tiles="true"/>           
           </div>
           <div class="shop__items">
-            <div class="shop__item shopitem" v-for="item in shopItems" :key="item.id">
-              <router-link :to="{name: 'Editor', params: {id: item.id}}" class="shopitem__link">
-                <img src="../assets/img/shop1.png" alt="">
-              </router-link>  
-              <div class="shopitem__header">
-                <h4 class="shopitem__title">{{item.title}}</h4>
-                <p class="appBtn appBtn--outline shopitem__stock">Stock: 320 pcs</p>
-              </div> 
-              <p class="shopitem__text appText">{{item.description}}</p>
-              <div class="shopitem__footer">
-                <div class="shopitem__pricewrapper">
-                  <span class="shopitem__priceinfo">Price per m²</span>
-                  <span class="shopitem__price">€ {{item.price}}</span>
-                </div>
-                <router-link :to="{name: 'Editor', params: {id: item.id}}" class="shopitem__btn appBtn appBtn--outline">TILE EDITOR</router-link>
-              </div>
-            </div>
+            <shop-item v-for="item in shopItems" :key="item.id" :itemInfo="item" :tile="true"></shop-item>
           </div>
         </div>
       </section>
@@ -45,8 +29,13 @@
 <script>
 import {getItems} from '@/api/shop'
 import AppFilter from "@/components/Filter"
+import ShopItem from "@/components/ShopItem"
 
 export default {
+  components: {
+    AppFilter,
+    'shop-item': ShopItem
+  },
   data: () => ({
     shopItems: [],
   }),
@@ -57,9 +46,6 @@ export default {
     UpdateItems(result){
       this.shopItems = result
     } 
-  },
-  components: {
-    AppFilter
   }
 }
 </script>

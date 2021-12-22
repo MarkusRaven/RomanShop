@@ -9,9 +9,10 @@
       <div class="payment__row">
         <div class="payment__info">
           
-          <Form class="payment__form appForm" @submit="completeOrder()" :validation-schema="schema" ref="myForm"> 
+          <Form v-slot="{ meta }" class="payment__form appForm" @submit="completeOrder()" :validation-schema="schema" ref="myForm">            
+            
             <div class="appForm__step">
-              <h2 class="appTitle appTitle--left">
+              <h2 class="appTitle appTitle--left mt-0">
                 {{$t('BillingH1')}}
               </h2>
               <p class="appText">
@@ -60,7 +61,7 @@
                 </div>
               </div>
               <div class="appForm__groupCheckbox groupCheckbox appCheckbox">
-                <Field name="ship" id="ship" type="checkbox"  v-model="ship"/>
+                <Field name="ship" id="ship" type="checkbox"  v-model="ship" />
                 <label for="ship">{{$t('Ship')}}</label>
                 <ErrorMessage class="appError" name="ship" />
               </div>
@@ -75,7 +76,7 @@
               </p>
               <div class="appCheckbox groupCheckbox full">
                 <div> 
-                  <Field name="FedEx" id="FedEx" type="checkbox"  v-model="FedEx"/>
+                  <Field name="delivery" id="FedEx" type="radio"  v-model="FedEx"/>
                   <label for="FedEx">FedEx</label>
                   <ErrorMessage class="appError" name="FedEx" />
                 </div>
@@ -87,7 +88,7 @@
               </div>
               <div class="appCheckbox groupCheckbox full">
                 <div> 
-                  <Field name="DHL" id="DHL" type="checkbox"  v-model="DHL"/>
+                  <Field name="delivery" id="DHL" type="radio"  v-model="DHL"/>
                   <label for="DHL">DHL</label>
                   <ErrorMessage class="appError" name="DHL" />
                 </div>
@@ -161,13 +162,16 @@
                 <div> 
                   <Field name="With" id="With" type="checkbox" v-model="With"/>
                   <label for="With">{{$t('With')}}</label>
-                  <ErrorMessage class="appError" name="With" />
                 </div>
               </div>
+                <ErrorMessage class="appError" name="With" />
             </div>  
-            <button 
+            <!-- <button 
               class="appForm__btn appBtn appBtn--outline"
-            >Complete order</button>
+            >Complete order</button> -->
+            <div class="paypal__wrapper" v-show="meta.valid" >
+              <div ref="paypal"></div>
+            </div>
             <div class="appForm__smalltext appText">
               <img src="../assets/img/garant.svg" width="26" height="28" alt="">
               <p class="bold">All your data are safe</p>
@@ -181,11 +185,11 @@
           <h2 class="appTitle appTitle--left order__title">Order Summary</h2>
           <p class="appText order__text">The price may vary depending on the delivery method and taxes of your city.</p>
           <div class="order__item itemSmall" v-for="item in cart.related_items" :key="item.id">
-            <img 
+            <!-- <img 
               src="../assets/img/close.svg" 
               class="itemSmall__close"
-              @click="deleteItem(item.item.id)"
-            >
+              @click="deleteItem(item)"
+            > -->
             <img src="../assets/img/order1.png" alt="" class="itemSmall__img">
             <div class="itemSmall__info">
               <h4 class="itemSmall__title">{{item.item.title}}</h4>
@@ -203,7 +207,15 @@
               </div>
             </div>
           </div>
-          {{cart.final_price}}
+          <div class="total__price price">
+            <div class="price__info">
+              <p><b>Total Order</b></p>
+              <p>Guaranteed Readiness day: August 21, 2021</p>
+            </div>
+            <div class="price__count">
+              {{cart.final_price}} EUR
+            </div>
+          </div>  
         </div>
       </div>
     </div>
@@ -212,8 +224,9 @@
 
 <script>
 import {mapGetters} from "vuex"
-import { Form, Field, ErrorMessage, useIsFormValid  } from 'vee-validate';
+import { Form, Field, ErrorMessage, useValidateForm  } from 'vee-validate';
 import * as yup from 'yup'
+import { paypalOrder, Order } from '@/api/shop'
 
 
 export default {
@@ -239,20 +252,109 @@ export default {
       Need: '',
       loaded: false,
       paidFor: false,
+      loaded: false,
+      paidFor: false,
+      product: {
+        price: 777999,
+        description: "leg lamp from that one movie",
+        img: "./assets/lamp.jpg"
+      }
     }
   },
   mounted(){
+    const script = document.createElement("script");
+    script.src =
+      "https://www.paypal.com/sdk/js?client-id=AbLwrgEaPeiIpwmFu6rP9rexynquY7H3KT8CrYV2bEejAfhK_q6o31viE4Zr2rtS2mRNe0DNpzvmj339";
+    script.addEventListener("load", this.setLoaded);
+    document.body.appendChild(script);
+    this.product.price = this.cart.final_price > 0 ? this.cart.final_price : '200'
   },
   methods: {
+    setLoaded: function() {
+      this.loaded = true;
+      window.paypal
+        .Buttons({
+          createOrder: (data, actions) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  description: this.product.description,
+                  amount: {
+                    currency_code: "USD",
+                    value: this.product.price
+                  }
+                }
+              ]
+            });
+          },
+          onApprove: async (data, actions) => {
+            const order = await actions.order.capture();
+            this.paidFor = true;           
+            try{       
+              if(this.isLoggedIn){
+                let cartId = this.$store.getters.cart.id
+                await Order({
+                  comment: '23312312321312312',
+                  paypal_id: order.id,
+                  cart: cartId,
+                  status: 1
+                })
+                await this.$store.dispatch('loadCart')
+                this.$router.push('/profile')
+              }else{ 
+                let cartItems = this.cart.related_items.map(item => ({
+                  height: item.height,
+                  width: item.width,
+                  length: item.length,
+                  bohrung: item.bohrung,
+                  comment: '23312312321312312',
+                  qty_item: 0,
+                  total_price: item.total_price,
+                  ausschnitt: item.ausschnitt,
+                  item: item.item.id,
+                  armierung: true,
+                  ausschnitt: 0,
+                  ausklinkung: 0,
+                  polierte_kante: true
+                }))
+                let result = {
+                  address: this.Address,
+                  city: this.Town,
+                  state: this.Country,
+                  zip: this.Postal,
+                  phone: this.Phone,
+                  paypal_id: order.id,
+                  email: order.payer.email_address,
+                  first_name: order.payer.name.given_name,
+                  last_name: order.payer.name.surname,
+                  total_items: this.cart.total_items,
+                  final_price: this.cart.final_price,
+                  cart_items: cartItems,
+                }
+                let res = await paypalOrder(result)
+                this.$store.dispatch('clearCart')
+                this.$router.push({name: 'Thanks', params: {info: res.data.detail}})       
+              }
+            }catch(err){
+              console.log(err)
+            }
+            console.log(order);
+          },
+          onError: err => {
+            console.log(err);
+          }
+        })
+        .render(this.$refs.paypal);
+    },
     completeOrder(){
       if(this.cart.related_items.length > 0){
-        this.$router.push({name: 'Paypal', params: {
-          address: this.Address,
-          city: this.Town,
-          state: this.Country,
-          zip: this.Postal,
-          phone: this.Phone
-        }})
+        // this.$router.push({name: 'Paypal', params: {
+          // address: this.Address,
+          // city: this.Town,
+          // state: this.Country,
+          // zip: this.Postal,
+          // phone: this.Phone
+        // }})
       }else{
         alert('add product in cart')
       }
@@ -265,12 +367,15 @@ export default {
           behavior: "smooth"
       })
     },
-    deleteItem(id){
-      console.log(id)
+    deleteItem(item){
+      this.$store.dispatch('deleteCartItem', {
+        CIid: item.id, 
+        Iid: item.item.id
+      })
     }
   },
   computed: {
-    ...mapGetters(['cart']),
+    ...mapGetters(['cart', 'isLoggedIn']),
     schema() {
       return yup.object({
         // fname: yup.string().required(),
@@ -281,6 +386,7 @@ export default {
         Town: yup.string().required(),
         Postal: yup.string().required(),
         Country: yup.string().required(),
+        With: yup.boolean().oneOf([true], "Must Accept Privacy Policy"),
       });
     },
     

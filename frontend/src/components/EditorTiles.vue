@@ -178,7 +178,7 @@ export default {
         item: item.id,
       }
       this.$store.dispatch('addToCart', item)
-      this.$router.push('/payment')
+      this.$router.push('/cart')
     },
     toCenter(w,h){
      return [(this.DPI_WIDTH - w) / 2, (this.DPI_WIDTH - h) / 2, w, h]

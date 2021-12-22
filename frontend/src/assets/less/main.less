@@ -55,6 +55,12 @@ a, button, input, label{
 .m-r10{
   margin-right: 10px;
 }
+.mt-0{
+  margin-top: 0 !important;
+}
+.mt-5{
+  margin-top: 15px;
+}
 .mx-auto{
   margin-left: auto;
   margin-right: auto;
@@ -91,6 +97,9 @@ a, button, input, label{
   text-align: center;
   font-weight: 300;
   transition: all .3s;
+  &::disabled{
+    opacity: 0.5;
+  }
   &:hover{
     opacity: 0.8;
   }
@@ -328,8 +337,9 @@ a, button, input, label{
       font-weight: 300;
       margin-top: 6px;
     }
-    & textarea{
+    & textarea, & .textarea{
       min-height: 170px;
+     
     }
     & label{
       display: block;
@@ -356,12 +366,12 @@ a, button, input, label{
       display: block;
     }
   }
-  & .appError{
-    color: red;
-    margin-top: 6px;
-    display: block;
-    font-size: 16px;
-  }
+}
+.appError{
+  color: red;
+  margin-top: 6px;
+  display: block;
+  font-size: 16px;
 }
 .groupCheckbox{
   padding: 11px 10px;
@@ -387,6 +397,9 @@ a, button, input, label{
 }
 // modal box
 .appModal{
+  max-width: 500px;
+  margin: auto;
+  background-color:#fff;
   &__header{
     display: flex;
     & button{
@@ -519,5 +532,51 @@ a, button, input, label{
   }
   &__politicWrap span{
     margin-left: 16px;
+  }
+}
+
+.text{
+  &__block{
+    margin-top: 54px;
+  }
+  &__title{
+    font-weight: 600;
+    font-size: 31px;
+    line-height: 64px;
+    padding-bottom: 10px;
+    position: relative;
+    display: inline;
+    &::before{
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 1px;
+      background-color: var(--main);
+      left: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  }
+  &__link{
+    color: #AE4444;
+  }
+  &__text{
+    margin-top: 33px;
+  }
+}
+.price{
+  margin-top: 23px;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &__info{
+    max-width: 190px;
+  }
+  &__count{
+    color: var(--main);
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 39px;
   }
 }

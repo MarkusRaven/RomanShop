@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { paypalOrder } from '@/api/shop'
+import { paypalOrder, Order } from '@/api/shop'
 import {mapGetters} from "vuex"
 
 
@@ -48,38 +48,46 @@ export default {
           },
           onApprove: async (data, actions) => {
             const order = await actions.order.capture();
-            this.paidFor = true;
-            let cartItems = this.cart.related_items.map(item => ({
-              height: item.height,
-              width: item.width,
-              length: item.length,
-              bohrung: item.bohrung,
-              comment: '23312312321312312',
-              qty_item: 0,
-              total_price: item.total_price,
-              ausschnitt: item.ausschnitt,
-              item: item.item.id,
-              armierung: true,
-              ausschnitt: 0,
-              ausklinkung: 0,
-              polierte_kante: true
-            }))
-            let result = {
-              ...this.$route.params,
-              paypal_id: order.id,
-              email: order.payer.email_address,
-              first_name: order.payer.name.given_name,
-              last_name: order.payer.name.surname,
-              total_items: this.cart.total_items,
-              final_price: this.cart.final_price,
-              cart_items: cartItems,
-            }
-            try{ 
-              let res = await paypalOrder(result)
-              this.$store.dispatch('clearCart')
+            this.paidFor = true;           
+            try{       
               if(this.isLoggedIn){
+                let cartId = this.$store.getters.cart.id
+                await Order({
+                  comment: '23312312321312312',
+                  paypal_id: order.id,
+                  cart: cartId,
+                  status: 1
+                })
+                await this.$store.dispatch('loadCart')
                 this.$router.push('/profile')
               }else{ 
+                let cartItems = this.cart.related_items.map(item => ({
+                  height: item.height,
+                  width: item.width,
+                  length: item.length,
+                  bohrung: item.bohrung,
+                  comment: '23312312321312312',
+                  qty_item: 0,
+                  total_price: item.total_price,
+                  ausschnitt: item.ausschnitt,
+                  item: item.item.id,
+                  armierung: true,
+                  ausschnitt: 0,
+                  ausklinkung: 0,
+                  polierte_kante: true
+                }))
+                let result = {
+                  ...this.$route.params,
+                  paypal_id: order.id,
+                  email: order.payer.email_address,
+                  first_name: order.payer.name.given_name,
+                  last_name: order.payer.name.surname,
+                  total_items: this.cart.total_items,
+                  final_price: this.cart.final_price,
+                  cart_items: cartItems,
+                }
+                let res = await paypalOrder(result)
+                this.$store.dispatch('clearCart')
                 this.$router.push({name: 'Thanks', params: {info: res.data.detail}})       
               }
             }catch(err){

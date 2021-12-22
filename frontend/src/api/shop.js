@@ -70,6 +70,17 @@ export const paypalOrder = data => {
      })
    })
 }
+export const Order = data => {
+  return new Promise((resolve, reject) => {
+    instance.post(`shop/order/`, data)
+     .then(resp => {
+       resolve(resp)
+     })
+     .catch(err => {
+       reject(err)
+     })
+   })
+}
 // export const createCart = () => {
 //   return new Promise((resolve, reject) => {
 //     instance.post(`shop/cart/`)
@@ -104,9 +115,22 @@ export const getCartUser = () => {
      })
    })
 }
+
 export const addToCard = data => {
   return new Promise((resolve, reject) => {
     instance.post(`shop/cart_item/`, data)
+     .then(resp => {
+       resolve(resp.data.results)
+     })
+     .catch(err => {
+       reject(err)
+     })
+   })
+}
+
+export const deleteCartItemFetch = id => {
+  return new Promise((resolve, reject) => {
+    instance.delete(`shop/cart_item/${id}`)
      .then(resp => {
        resolve(resp.data.results)
      })
@@ -120,7 +144,7 @@ export const getOrders = () => {
   return new Promise((resolve, reject) => {
     instance.get(`shop/order/me`)
      .then(resp => {
-       resolve(resp.data)
+       resolve(resp.data.results)
      })
      .catch(err => {
        reject(err)
@@ -129,7 +153,19 @@ export const getOrders = () => {
 }
 export const ActivateUser = data => {
   return new Promise((resolve, reject) => {
-    instance.post(`/auth/users/activation/`, data)
+    instance.post(`auth/users/activation/`, data)
+     .then(resp => {
+       resolve(resp.data)
+     })
+     .catch(err => {
+       reject(err)
+     })
+   })
+}
+
+export const support = data => {
+  return new Promise((resolve, reject) => {
+    instance.post(`shop/support/`, data)
      .then(resp => {
        resolve(resp.data)
      })

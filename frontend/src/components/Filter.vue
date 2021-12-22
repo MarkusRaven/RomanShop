@@ -28,16 +28,16 @@
         <p class="sidebar__itemtitle">{{item.type}}</p>
         <ul class="sidebar__sublist groupImgCheckbox">
           <li class="groupImgCheckbox__item" v-for="subitem in item.items" :key="subitem.id">
-            <input type="checkbox" :id="subitem.title" :name="item.type" v-model="subitem.checked">
-            <label :for="subitem.title">
+            <input type="checkbox" :id="subitem.title + subitem.id" :name="item.type" v-model="subitem.checked">
+            <label :for="subitem.title + subitem.id">
               <img :src="subitem.image" alt="">
             </label>
           </li>
         </ul>
       </li>
-      <li class="sidebar__item appRange">
+      <li class="sidebar__item appRange" v-if="Tiles">
         <div class="appRange__wrapper">
-          <input type="number" class="appRange__input appInput" v-model="Price.value[0]">
+          <input type="number" class="appRange__input appInput" :value="Price.value[0]" @change="setMin($event)">
           <div class="appRange__line"></div>
           <input type="number" class="appRange__input appInput" :value="Price.value[1]" @change="setMax($event)">
         </div> 
@@ -110,6 +110,11 @@ export default {
   methods: {
     setMax(event){
       this.Price.value[1] = event.target.value
+      this.setPrice()
+    },
+    setMin(event){
+      this.Price.value[0] = event.target.value
+      this.setPrice()
     },
     clear(){
       for(let i in this.filter.multipleСhoice){

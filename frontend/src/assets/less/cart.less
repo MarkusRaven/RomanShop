@@ -1,0 +1,69 @@
+@import "./smart-grid.less";
+
+.cart{
+  &__row{
+    .row-flex();
+    align-items: flex-start;
+    margin-top: 37px;
+  }
+  &__title{
+    margin-top: 0;
+  }
+  &__info{
+    .col();
+    .size(7);
+  }
+  &__total{
+    .col();
+    .size(5);
+    border: 2px solid #44324B;
+    padding: 30px;
+  }
+  &__items{
+    margin-top: 10px;
+  }
+}
+
+.cart__item {
+  align-items: flex-start;
+  margin-top: 30px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid #44324B;
+
+  & .itemSmall__title{
+    font-size: 24px;
+  }
+  & .itemSmall__desc{
+    font-size: 18px;
+    line-height: 27px;
+    color: #575757;
+    max-width: 250px;
+    margin-top: 10px;
+  }
+  & .itemSmall__priceinfo{
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 45px;
+  }
+  & .itemSmall__count{
+    margin-top: 15px;
+    display: inline-block;
+  }
+  & .itemSmall__img{
+    max-width: 310px;
+  }
+  & .itemSmall__price{
+    display: block;
+  }
+}
+
+.total{
+  &__title{
+    padding-bottom: 15px;
+    border-bottom: 1px solid #44324B;
+  }
+  &__btn{
+    width: 100%;
+    margin-top: 30px;
+  }
+}

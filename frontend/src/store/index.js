@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import auth from './auth'
-import {getCartUser, getOneItem, addToCard} from '@/api/shop'
+import {getCartUser, getOneItem, addToCard, deleteCartItemFetch} from '@/api/shop'
 
 export default createStore({
   state: {
@@ -15,14 +15,16 @@ export default createStore({
     },
   },
   actions: {
-    async deleteCartItem(id){
+    async deleteCartItem({commit},  {CIid = null, Iid}){
+      let cart = {}
       if(Object.keys(this.state.auth.token).length){
         console.log('delete from server cart')
-
+        await deleteCartItemFetch(CIid)
+        cart = await getCartUser()       
       }else{
         console.log('delete from localcart')
         cart = JSON.parse(localStorage.getItem('cart')) 
-        let index = cart.related_items.findindex(item => item.item.id == id)
+        let index = cart.related_items.findIndex(item => item.item.id == Iid)
         cart.related_items.splice(index, 1)
         cart.total_items = cart.related_items.length
         cart.final_price = cart.related_items.reduce((sum, res) => {
@@ -30,6 +32,7 @@ export default createStore({
         }, 0)
         localStorage.setItem('cart', JSON.stringify(cart))    
       }
+      commit('setCart', cart)
     },
     async addToCart({commit}, item){
       let cart = {}    
@@ -97,8 +100,6 @@ export default createStore({
           return parseInt(sum)  + parseInt(res.total_price)
         }, 0)
         cart.total_items = cart.related_items.length
-
-        
       }else{
         console.log('start local cart')
         if(!cart){

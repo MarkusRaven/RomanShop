@@ -32,6 +32,12 @@ const routes = [
     component: () => import( '../views/Payment.vue')
   },
   {
+    path: '/cart',
+    name: 'Cart',
+    meta: {layout: 'main'},
+    component: () => import( '../views/Cart.vue')
+  },
+  {
     path: '/paypal',
     name: 'Paypal',
     meta: {layout: 'main'},
@@ -60,6 +66,18 @@ const routes = [
     name: 'EmailCheck',
     meta: {layout: 'main'},
     component: () => import( '../views/EmailCheck.vue')
+  },
+  {
+    path: '/data',
+    name: 'Data',
+    meta: {layout: 'main'},
+    component: () => import( '../views/Data.vue')
+  },
+  {
+    path: '/impressum',
+    name: 'Impressum',
+    meta: {layout: 'main'},
+    component: () => import( '../views/Impressum.vue')
   },
   {
     path: '/editor/:id',

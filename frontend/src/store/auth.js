@@ -29,6 +29,7 @@ export default{
           localStorage.setItem('token', token)
           instance.defaults.headers.common['Authorization'] = 'Token ' + token
           commit('auth_success', token)
+          this.dispatch('getUser')
           resolve(resp)
         })
         .catch(err => {
@@ -51,6 +52,19 @@ export default{
     getUser({commit}){
       return new Promise((resolve, reject) => {
         instance.get('auth/users/me/')
+          .then(resp => {
+            const user = resp.data
+            commit('setUser', user)
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    userUpd({commit}, data){
+      return new Promise((resolve, reject) => {
+        instance.patch(`auth/users/${data.id}/`, data.fields)
           .then(resp => {
             const user = resp.data
             commit('setUser', user)

@@ -20,18 +20,26 @@
           Order history
         </header>
         <div class="content__body">
-          <template v-if="cart.related_items.length">
+          <template v-if="orders.length">
           <div class="history">       
-            <div class="history__item itemSmall" v-for="item in cart.related_items" :key="item.item.id">
+            <div class="history__item itemSmall" v-for="item in orders" :key="item.id">
               <img src="../assets/img/order1.png" alt="" class="itemSmall__img">
               <div class="itemSmall__info">
-                <h4 class="itemSmall__title">{{item.item.title}}</h4>
+                
+                <h4 class="itemSmall__title">
+                  <span 
+                  v-for="subitem in item.cart.related_items"
+                  :key="subitem.id"
+                  >
+                    {{subitem.item.title}},
+                  </span>
+                  </h4>
                 <ul class="itemSmall__list">
-                  <li>Delivery: Europa</li>
-                  <li>date: 30.09.2021</li>
+                  <li>Order №: {{item.id}}</li>
+                  <li>date: {{item.updated.split('T')[0]}}</li>
                 </ul>
                 <div class="itemSmall__price">
-                  <span class="itemSmall__priceinfo">€ {{item.item.price}}</span>
+                  <span class="itemSmall__priceinfo">€ {{item.cart.final_price}}</span>
                 </div>
               </div>
             </div>
@@ -51,32 +59,49 @@
           Personal data
         </header>
         <div class="content__body">
-          <form class="appform profileForm">
+          <Form 
+            class="appform profileForm"
+            @submit="saveChange()"
+            :validation-schema="schema"
+          >
             <div class="appForm__billingWrap">
               <div class="appForm__group appForm__group--col appForm__group--half"> 
-                  <label for="fname">Full name</label>
-                  <input name="fname" id="fname" type="text" class="appInput" placeholder="Enter the full name"/>
+                  <label for="fname">First name</label>
+                  <Field v-model="first_name" name="first_name" id="first_name" type="text" class="appInput" placeholder="Enter the full name"/>
+                  <ErrorMessage class="appError" name="first_name" />
+              </div>
+              <div class="appForm__group appForm__group--col appForm__group--half"> 
+                  <label for="lname">Last name</label>
+                  <Field v-model="last_name" name="last_name" id="last_name" type="text" class="appInput" placeholder="Enter the last name"/>
+                  <ErrorMessage class="appError" name="last_name" />
               </div>
               <div class="appForm__group appForm__group--col appForm__group--half"> 
                   <label for="email">E-mail</label>
-                  <input name="email" id="email" type="email" class="appInput" placeholder="example@mail.com"/>
+                  <Field v-model="email" name="email" id="email" type="email" class="appInput" placeholder="example@mail.com"/>
+                  <ErrorMessage class="appError" name="email" />
               </div>
               <div class="appForm__group appForm__group--col appForm__group--3"> 
                   <label for="Telephone">Telephone</label>
-                  <input name="Telephone" id="Telephone" type="phone" class="appInput" placeholder=""/>
+                  <Field v-model="phone" name="phone" id="phone" type="phone" class="appInput" placeholder=""/>
+                  <ErrorMessage class="appError" name="phone" />
               </div>
-              <div class="appForm__group appForm__group--col appForm__group--3"> 
+              <!-- <div class="appForm__group appForm__group--col appForm__group--3"> 
                   <label for="fname">Date of birth</label>
                   <input name="date" id="date" type="date" class="appInput" placeholder="01.01.1000"/>
-              </div>
+              </div> -->
               <div class="appForm__group appForm__group--col appForm__group--half"> 
                   <label for="password">Password</label>
-                  <input name="password" id="password" type="text" class="appInput" placeholder="********"/>
+                  <input name="password" id="password" type="password" class="appInput" placeholder="********"/>
                   <button class="appLink">Change Password</button>
               </div>
             </div>
-            <button class="appBtn appBtn--meduim profileForm__btn">SAVE CHANGES</button>
-          </form>
+            <div class="appError" v-for="(error, index) in errors" :key="index">
+              <div class="" v-for="(err, index1) in error" :key="index1">
+                {{ err }}
+              </div>
+            </div>
+            <button class="appBtn appBtn--meduim profileForm__btn" type="submit">SAVE CHANGES</button>
+          </Form>
         </div>
       </div>
       <div class="profile__content content" v-if="tab == 3">
@@ -88,17 +113,23 @@
             <div class="appForm__billingWrap">
               <div class="appForm__group appForm__group--col appForm__group--half"> 
                 <label for="question">Ask a question</label>
-                <textarea name="question" id="question" type="text" class="appInput" placeholder="Ask the question in a detailed form (preferably in more detail)..."></textarea>
+                <textarea name="question" id="question" type="text" class="appInput" placeholder="Ask the question in a detailed form (preferably in more detail)..." v-model="help"></textarea>
                 <p class="appText profileForm__notise">The answer will be sent to the post office*</p>
               </div>
             </div>
             <div class="appForm__billingWrap">
               <div class="appForm__group appForm__group--col appForm__group--half"> 
                   <label for="email">E-mail</label>
-                  <input name="email" id="email" type="email" class="appInput" placeholder="example@mail.com">
+                  <input name="email" id="email" type="email" class="appInput" placeholder="example@mail.com" v-model="email">
               </div>
             </div>
-            <button class="appBtn appBtn--meduim profileForm__btnSend">SEND</button>
+            <div class="appError" v-for="(error, index) in errors" :key="index">
+              {{index}}:
+              <div class="" v-for="(err, index1) in error" :key="index1">
+                {{ err }}
+              </div>
+            </div>
+            <button class="appBtn appBtn--meduim profileForm__btnSend" @click.prevent="sendHelp">SEND</button>
           </form>
         </div>
       </div>    
@@ -108,26 +139,87 @@
 
 <script>
 import {mapGetters} from "vuex"
-import {getOrders} from '@/api/shop'
+import {getOrders, support} from '@/api/shop'
+import { Form, Field, ErrorMessage, useValidateForm  } from 'vee-validate';
+import * as yup from 'yup'
 
 export default {
   data: () => ({
     tab: 1,
-    orders: []
+    orders: [],
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    errors: '',
+    help: ''
   }),
   async mounted(){
     this.orders = await getOrders()
-    console.log(this.orders)
+    this.first_name = this.user.first_name
+    this.last_name = this.user.last_name
+    this.email = this.user.email
+    this.phone = this.user.phone
+    console.log(this.user)
   },
   methods: {
-    logout(){
-      this.$store.dispatch('logout')
+    async logout(){
+      await this.$store.dispatch('logout')
+      await this.$store.dispatch('loadCart')
       this.$router.push('/')
     },
+    async saveChange(){
+      this.errors = []
+      try{
+        await this.$store.dispatch('userUpd', {
+          id: this.user.id,
+          fields: {
+            first_name: this.first_name,
+            last_name: this.last_name,
+            email: this.email,
+            phone: this.phone,
+          },
+        })
+        alert('success')
+      }catch(err){
+        if(err.response){
+          this.errors = err.response.data
+        }
+      }
+    },
+    async sendHelp(){
+      this.errors = []
+      try{
+        await support({
+          subject: this.help,
+          message: this.help,
+          email: this.email
+        })
+        alert('success')
+      }catch(err){
+        if(err.response){
+          this.errors = err.response.data
+        }
+      }
+      
+    }
   },
   computed: {
-    ...mapGetters(['cart'])
-  }
+    ...mapGetters(['cart', 'user']), 
+    schema() {
+      return yup.object({
+        first_name: yup.string().required(),
+        last_name: yup.string().required(),
+        email: yup.string().required().email(),
+        phone: yup.number().required(),
+      });
+    }
+  },
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
 }
 </script>
 

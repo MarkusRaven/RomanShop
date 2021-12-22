@@ -1,6 +1,9 @@
 @import "./smart-grid.less";
 
 .payment{
+  & .appTitle{
+    margin-top: 64px;
+  }
   &__wrapper{
     .wrapper()
   }
@@ -8,6 +11,8 @@
     display: flex;
     justify-content: space-between;
     margin-top: 50px;
+    align-items: flex-start;
+
   }
   &__info{
     width: 54%;
@@ -35,7 +40,7 @@
   &__title{
     font-size: 24px;
     line-height: 36px;
-    margin: 0;
+    margin: 0 !important;
   }
   &__text{
     font-size: 16px;
@@ -50,8 +55,7 @@
 }
 
 .paypal__wrapper{
-  .wrapper();
-  text-align: center;
+  margin-top: 50px;
 }
 
 .thanks{

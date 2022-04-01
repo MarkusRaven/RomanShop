@@ -1,8 +1,8 @@
 <template>
   <div class="shop__item shopitem">
-    <router-link :to="{name: 'Editor', params: {id: itemInfo.id}}" class="shopitem__link">
+    <div class="shopitem__link">
       <img src="../assets/img/shop1.png" alt="">
-    </router-link>  
+    </div>  
     <div class="shopitem__header">
       <h4 class="shopitem__title">{{itemInfo.title}}</h4>
       <p class="appBtn appBtn--outline shopitem__stock" v-if="tile">Stock: 320 pcs</p>

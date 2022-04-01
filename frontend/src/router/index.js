@@ -8,12 +8,6 @@ const routes = [
     component: () => import( '../views/Home.vue')
   },
   {
-    path: '/DeinSteinDesign',
-    name: 'About',
-    meta: {layout: 'main'},
-    component: () => import( '../views/DeinSteinDesign.vue')
-  },
-  {
     path: '/tiles',
     name: 'Tiles',
     meta: {layout: 'main'},
@@ -78,12 +72,6 @@ const routes = [
     name: 'Impressum',
     meta: {layout: 'main'},
     component: () => import( '../views/Impressum.vue')
-  },
-  {
-    path: '/editor/:id',
-    name: 'Editor',
-    meta: {layout: 'editor'},
-    component: () => import( '../views/Editor.vue')
   },
   {
     path: '/svgeditor',

@@ -13,9 +13,6 @@
               <router-link to="/" class="mainnav__link">Home</router-link>
             </li>
             <li class="mainnav__item">
-              <router-link to="/DeinSteinDesign" class="mainnav__link">DeinSteinDesign</router-link>
-            </li>
-            <li class="mainnav__item">
               <router-link to="/Tiles" class="mainnav__link">Tiles</router-link>
             </li>
             <li class="mainnav__item">

@@ -49,7 +49,7 @@
             <p>Guaranteed Readiness day: August 21, 2021</p>
           </div>
           <div class="price__count">
-            297 EUR
+            {{cart.final_price}} EUR
           </div>
         </div>  
         <button 

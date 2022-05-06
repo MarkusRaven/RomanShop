@@ -12,24 +12,37 @@
     color: var(--main);
   }
 }
+.toolbar{
+  display: flex;
+  justify-content: center;
+  & .appBtn{
+    margin-right: 20px;
+  }
+}
+
+.sm-block({
+  .toolbar{
+    & .appBtn{
+      margin-right: 5px;
+      font-size: 14px;
+      padding: 5px;
+    }
+  }
+});
+
 .shop{
   margin-top: 37px;
-  &__row{
-    display: flex;
-    margin-top: 52px;
-    justify-content: space-between;
-  }
-  &__sidebar{
-    width: 22%;
-  }
+  margin-bottom: 50px;
   &__items{
-    width: 78%;
-    .u-row-flex(50px)
+    margin-top: 52px;
+    .row-flex();
   }
   &__item{
-    .u-col(50px);
-    .u-size(6, 12, 50px);
-    margin-bottom: 80px;
+    .size(4);
+    .size-lg(4);
+    .size-md(6);
+    .size-sm(12);
+    .col();
   }
   &__title{
     text-align: left;
@@ -38,60 +51,34 @@
     }
   }
 }
-.sidebar{
-  &__item{
-    margin-bottom: 45px;
-  }
-  &__sublist{
-    margin-top: 7px;
-  }
-  &__itemtitle{
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 30px;
-  }
-  &__subitem{
-    margin-top: 15px;
-    font-size: 16px;
-    line-height: 24px;
-  }
-  &__selected{
-    border: 2px solid var(--main);
-    padding-left: 26px;
-    padding-top: 9px;padding-bottom: 9px;
-    padding-right: 11px;
-    display: inline-block;
-    margin-top: 16px;
-    margin-right: 16px;
-    &--img{
-      padding-left: 5px;
+.md-block({
+  .shop{
+    &__items{
+      margin-top: 10px;
     }
-    & span {
-      margin-right: 29px;
+    &__item{
+      margin-top: 20px;
     }
-    & img {
-      vertical-align: middle;
-      cursor: pointer;
+    &__btn{
+      width: 220px;
+      font-size: 16px;
+      padding: 5px;
     }
   }
-  &__selectedWrapper{
-    margin-top: 6px; 
-    margin-bottom: 45px;
-  }
-  &__clear{
-    margin-top: 20px;
-  }
-}
+});
+
 .selectedImg{
   width: 26px; 
   height: 26px;
   margin-right: 29px;
 }
 .shopitem{
+  text-align: center;
   &__title{
     font-weight: 600;
     font-size: 24px;
     line-height: 36px;
+    text-align: center;
   }
   &__link{
     display: block;
@@ -101,6 +88,8 @@
     width: 207px;
     padding-top: 13px;
     padding-bottom: 13px;
+    margin-left: auto;
+    margin-right: auto;
   }
   &__header{
     display: flex;
@@ -131,6 +120,17 @@
     line-height: 45px;
   }
 }
+
+.md-block({
+  .shopitem{
+    &__btn{
+      width: 220px;
+      font-size: 16px;
+      padding: 5px;
+    }
+  }
+});
+
 .appRange{
   & .slider-horizontal .slider-handle{
     border-radius: 0;

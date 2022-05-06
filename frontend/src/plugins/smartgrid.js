@@ -12,7 +12,7 @@ var settings = {
     },
     breakPoints: {
         lg: {
-            width: '1100px', /* -> @mediafiles (max-width: 1100px) */
+            width: '1280px', /* -> @mediafiles (max-width: 1100px) */
         },
         md: {
             width: '960px'

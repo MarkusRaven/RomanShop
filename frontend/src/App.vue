@@ -11,13 +11,6 @@ import EditorLayout from './layouts/EditorLayout.vue'
  
 export default {
   async mounted(){
-    if(!Object.keys(this.$store.getters.user).length){
-      try{
-        await this.$store.dispatch('getUser')
-      }catch{
-        this.$store.dispatch('logout')
-      }
-    }
     this.$store.dispatch('loadCart')
   },
   computed: {

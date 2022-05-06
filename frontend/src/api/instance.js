@@ -1,10 +1,11 @@
 import axios from 'axios'
+import { ApiInstance } from '../config'
 
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_INSTANCE,
+  baseURL: ApiInstance,
   headers: {
     accept: 'application/json',
   }
 })
-console.log(process.env.VUE_APP_INSTANCE)
+console.log(ApiInstance)
 export default instance 

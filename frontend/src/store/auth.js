@@ -11,8 +11,10 @@ export default{
     register({commit}, user){
       return new Promise((resolve, reject) => {
        commit('auth_request')
-       instance.post('auth/users/', user)
+       instance.post('register/', user)
         .then(resp => {
+          if(!resp.data.token) throw new Error(resp.data)
+          this.dispatch('login', user)
           resolve(resp)
         })
         .catch(err => {
@@ -23,13 +25,13 @@ export default{
     login({commit}, user){
       return new Promise((resolve, reject) => {
        commit('auth_request')
-       instance.post('auth/token/login/', user)
+       instance.post('login/', user)
         .then(resp => {
-          const token = resp.data.auth_token
+          const token = resp.data.token
           localStorage.setItem('token', token)
           instance.defaults.headers.common['Authorization'] = 'Token ' + token
           commit('auth_success', token)
-          this.dispatch('getUser')
+          // this.dispatch('getUser')
           resolve(resp)
         })
         .catch(err => {

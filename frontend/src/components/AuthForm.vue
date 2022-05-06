@@ -7,19 +7,23 @@
     <div class="appModal">
       <header class="appModal__header">
         <button 
-          class="appBtn"  
-          :class="formType !== 'login' ? 'appBtn--outline' : null"
+          class="appBtn appBtn--text"  
+          :class="formType !== 'login' ? 'appBtn--unactive' : null"
           @click="formType = 'login'"
         >Authorization</button>
         <button 
-          class="appBtn" 
-          :class="formType !== 'registration' ? 'appBtn--outline' : null"
+          class="appBtn appBtn--text" 
+          :class="formType !== 'registration' ? 'appBtn--unactive' : null"
           @click="formType = 'registration'"
         >Registration</button>
       </header>
       <div class="appModal__body">
         <div class="registration" v-if="formType == 'registration'">
-          <p class="appText text-center" :class="classSuccess">
+          <p 
+            class="appText text-center" 
+            :class="classSuccess"
+            v-if="$route.params.message"
+          >
             {{$route.params.message}}
           </p>
           <Form class="appForm" @submit="Registration()" :validation-schema="schemaRegistration"> 
@@ -31,7 +35,6 @@
             <div class="appForm__group"> 
               <label for="password">Password</label>
               <Field name="password" id="password" type="password" class="appInput" v-model.trim="password" placeholder="Enter your password"  autocomplete="on"/>
-              <p class="appText profileForm__notise">The password must be at least 6 characters long.</p>
               <ErrorMessage class="appError" name="password" />
             </div>
             <div class="appForm__group"> 
@@ -39,17 +42,17 @@
               <Field name="passwordConfirm" id="passwordConfirm" type="password" class="appInput" v-model.trim="passwordConfirm" placeholder="Enter your password again"  autocomplete="on"/>
               <ErrorMessage class="appError" name="passwordConfirm" /> 
             </div>
-            <div class="appError" v-for="(error, index) in errors" :key="index">
-              <div class="" v-for="(err, index1) in error" :key="index1">
-                {{ err }}
-              </div>
+            <div class="appError">
+              {{errors}}
             </div>
             <Spinner v-if="loading" class="mt-5"/>
-            <button v-else class="appBtn appBtn--meduim appBtn--outline appModal__btn">REGISTER</button>
+            <button v-else class="appBtn appBtn--small appBtn--outline appModal__btn">REGISTER</button>
           </Form>
         </div>
         <div class="login" v-if="formType == 'login'">
-          <p class="appText text-center success" :class="classSuccess">
+          <p class="appText text-center success" :class="classSuccess"
+          v-if="$route.params.message"
+          >
             {{$route.params.message}}
           </p>
           <Form class="appForm" @submit="Login()"
@@ -70,7 +73,7 @@
               </div>
             </div>
             <Spinner v-if="loading"/>
-            <button v-else class="appBtn appBtn--meduim appBtn--outline appModal__btn">Login</button>
+            <button v-else class="appBtn appBtn--small appBtn--outline appModal__btn">Login</button>
           </Form>
         </div>
       </div>
@@ -116,17 +119,15 @@ export default {
       let data = {
         email: this.emailAuth,
         password: this.password,
-        re_password: this.passwordConfirm
       }
       this.errors = ''
       try{
         await this.$store.dispatch('register', data)
         this.value = false
-        this.$router.push({name: 'EmailCheck', params: {email: this.emailAuth}})
+        this.$router.push('/')
       }catch (err) {
-        if(err.response){
-          this.errors = err.response.data
-        }
+        err && (this.errors = err)
+        
       }
       this.loading = false
     },
@@ -153,9 +154,9 @@ export default {
   computed: {
     schemaRegistration() {
       return yup.object({
-        emailAuth: yup.string().required().email(),
-        password: yup.string().required(),
-        passwordConfirm: yup.string().required().test('password-confirm', 'password not confirm', value => value === this.password),
+        emailAuth: yup.string().required('email обязательное поле').email('введите верный email'),
+        password: yup.string().required('пароль обязательное поле'),
+        passwordConfirm: yup.string().required('пароль обязательное поле').test('password-confirm', 'пароли не совпадают', value => value === this.password),
       });
     },
     classSuccess(){
@@ -163,8 +164,8 @@ export default {
     },
     schemaLogin() {
       return yup.object({
-        emailAuth: yup.string().required().email(),
-        password: yup.string().required(),
+        emailAuth: yup.string().required('email обязательное поле').email('введите верный email'),
+        password: yup.string().required('пароль обязательное поле'),
       });
     },
     value: {

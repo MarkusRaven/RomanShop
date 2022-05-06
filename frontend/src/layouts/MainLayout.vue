@@ -2,48 +2,55 @@
   <div>
     <header>
       <nav class="mainnav">
-        <router-link to="/" class="mainnav__logo">
-          <svg width="158" height="111" id="logosite">
-            <use xlink:href="../assets/img/DeinSteinLogo.svg#logo"></use>
-          </svg>
-        </router-link>
-        <div class="mainnav__wrapper">
+        <div 
+          class="mainnav__mobileMenu mobileMenu"
+        >
+          <router-link to="/" class="mobileMenu__logo">
+            <img src="../assets/img/logo.jpg" alt="">
+          </router-link>
+          <img 
+            class="mobileMenu__menu" 
+            src="../assets/img/burger.png"
+            @click="menu = !menu"
+          >
+        </div>
+        <div 
+          class="mainnav__wrapper" 
+          :class="menu && 'mainnav__open'"
+        >
           <ul class="mainnav__list">
+            <router-link to="/" class="mainnav__logo">
+              <img src="../assets/img/logo.jpg" alt="">
+            </router-link>
             <li class="mainnav__item">
-              <router-link to="/" class="mainnav__link">Home</router-link>
+              <router-link to="/" class="mainnav__link">Главная</router-link>
             </li>
             <li class="mainnav__item">
-              <router-link to="/Tiles" class="mainnav__link">Tiles</router-link>
-            </li>
-            <li class="mainnav__item">
-              <app-select 
-                :items="items" 
-                @select="setLocale($event)" 
-                :selected="lang"             
-              />
+              <router-link to="/Tiles" class="mainnav__link">Каталог</router-link>
             </li>
           </ul>
-          <div class="mainnav__search search">
-            <div class="search__icon">
-              <svg width="14" height="14" >
-                <use xlink:href="../assets/icon/search.svg#search"></use>
-              </svg>
-            </div>
-            <input type="text" placeholder="What are you looking for?">
-          </div>
           <div class="mainnav__icon icon">
             <a @click="onOpen()"> 
-              <svg width="24" height="24">
-                <use xlink:href="../assets/icon/user.svg#user"></use>
-              </svg>
+              <img src="../assets/img/user.png" alt="" width="30">
             </a>
             <router-link to="/cart">
-              <svg width="24" height="24">
-                <use xlink:href="../assets/icon/basket.svg#basket"></use>
-              </svg>
+              <img src="../assets/img/cart.png" alt="" width="30">
               <div class="icon__counter">{{totalItems}}</div> 
             </router-link>
+            <a href="">
+              <img src="../assets/img/vk.png" alt="" width="30">
+            </a>
+            <a href="">
+              <img src="../assets/img/inst.png" alt="" width="30">
+            </a>
           </div>
+          <button 
+            class="appBtn appBtn--small mainnav__logout" 
+            @click="logout()"
+            v-if="isLoggedIn"
+          >
+            Выйти
+          </button>
         </div>
       </nav>
     </header>
@@ -51,71 +58,11 @@
     <router-view />
     <!-- footer -->
     <footer class="mainfooter">
-        <div class="mainfooter__wrapper">
-          <router-link to="/" class="mainfooter__logo">
-            <svg width="158" height="111">
-              <use xlink:href="#logosite"></use>
-            </svg>
-          </router-link>
-          <ul class="mainfooter__list">
-            <li class="mainfooter__listitem">
-              <a href="" class="mainfooter__link">Navigation</a>
-              <ul class="mainfooter__sublist">
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">Home</a>
-                </li>
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">DeinSteinDesign</a>
-                </li>
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">KITCHEN</a>
-                </li>
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">Mehr</a>
-                </li>
-              </ul>
-            </li>
-            <li class="mainfooter__listitem">
-              <a href="" class="mainfooter__link">Connections</a>
-              <ul class="mainfooter__sublist">
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">Facebook</a>
-                </li>
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">Twitter</a>
-                </li>
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">KITCHEN</a>
-                </li>
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">Mehr</a>
-                </li>
-              </ul>
-            </li>
-            <li class="mainfooter__listitem">
-              <a href="" class="mainfooter__link">Account</a>
-              <ul class="mainfooter__sublist">
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">Your account</a>
-                </li>
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">Returns Centre</a>
-                </li>
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">100 % purchase protection</a>
-                </li>
-                <li class="mainfooter__subitem">
-                  <a href="" class="mainfooter__sublink">Help</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
         <div class="mainfooter__politic">
-          <p class="mainfooter__politicText">Copyright © 2021 DeinSteinDesign. All rights reserved.</p>
+          <p class="mainfooter__politicText">Copyright © 2021 CREATE GOOD. Все права защищены</p>
           <div class="mainfooter__politicWrap">
-            <span class="mainfooter__politicText">Impressum</span>
-            <span class="mainfooter__politicText">Datenschutzerklärung</span>
+            <span class="mainfooter__politicText">мы четкие</span>
+            <span class="mainfooter__politicText">ребята молодцы</span>
           </div>
         </div>
     </footer>
@@ -135,8 +82,12 @@ import AuthForm from "@/components/AuthForm"
       lang: {name: 'ru'},
       show: false,
       formType: 'login', 
+      menu: false
     }),
     watch: {
+      "$route.path"() {
+        this.menu = false
+      },
       "$route.params"(value) {
         if(value.login){
           this.show = true
@@ -158,6 +109,11 @@ import AuthForm from "@/components/AuthForm"
           this.$router.push('/profile')
         :
           this.show = true
+      },
+      async logout(){
+        await this.$store.dispatch('logout')
+        await this.$store.dispatch('loadCart')
+        this.$router.push('/')
       },
     },
     components: {

@@ -67,10 +67,8 @@
               <Field name="password" id="password" type="password" class="appInput" v-model.trim="password" placeholder="Enter your password" autocomplete="on"/>
               <ErrorMessage class="appError" name="password" />
             </div>
-            <div class="appError" v-for="(error, index) in errors" :key="index">
-              <div class="" v-for="(err, index1) in error" :key="index1">
-                {{ err }}
-              </div>
+            <div class="appError">
+              {{errors}}
             </div>
             <Spinner v-if="loading"/>
             <button v-else class="appBtn appBtn--small appBtn--outline appModal__btn">Login</button>
@@ -127,7 +125,6 @@ export default {
         this.$router.push('/')
       }catch (err) {
         err && (this.errors = err)
-        
       }
       this.loading = false
     },

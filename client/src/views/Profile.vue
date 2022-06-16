@@ -54,7 +54,6 @@ export default {
   }),
   async mounted(){
     this.orders = await getOrders()
-    console.log(this.orders)
   },
 }
 </script>

@@ -21,12 +21,10 @@
 
 <script>
 import {getItems, getItemsType, getFilter} from '@/api/shop'
-import AppFilter from "@/components/Filter"
 import ShopItem from "@/components/ShopItem"
 
 export default {
   components: {
-    AppFilter,
     'shop-item': ShopItem
   },
   data: () => ({

@@ -107,17 +107,7 @@ export default {
       },
       Postal: '',
       With: false,
-      DHL: false,
-      FedEx: false,
       loaded: false,
-      paidFor: false,
-      loaded: false,
-      paidFor: false,
-      product: {
-        price: 777999,
-        description: "leg lamp from that one movie",
-        img: "./assets/lamp.jpg"
-      }
     }
   },
   mounted(){
@@ -136,23 +126,14 @@ export default {
           const orderId = new FormData
           orderId.append('id', orderInfo.id)
           const payInfo = await orderPay(orderId)
-
           window.location.href = payInfo.confirmation.confirmation_url
         } catch(e) {
           console.log(e)
         }
-        
       }else{
         alert('add product in cart')
       }
-      
     },
-    deleteItem(item){
-      this.$store.dispatch('deleteCartItem', {
-        CIid: item.id, 
-        Iid: item.item.id
-      })
-    }
   },
   computed: {
     ...mapGetters(['cart', 'isLoggedIn', 'totalPrice']),
@@ -166,7 +147,6 @@ export default {
         With: yup.boolean().oneOf([true], "Необходимо принять политику конфиденциальности"),
       });
     },
-    
   },
   components: {
     Form,

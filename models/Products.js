@@ -4,7 +4,7 @@ const ProductTypes = require('./ProductTypes')
 
 const Products = sequelize.define('products', {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	photo: { type: DataTypes.ARRAY(DataTypes.STRING) },
+	photo: { type: DataTypes.STRING },
 	name: { type: DataTypes.STRING },
 	short_desc: { type: DataTypes.STRING(510) },
 	item_desc: { type: DataTypes.STRING(510) },

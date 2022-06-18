@@ -1,1 +1,1 @@
-export const ApiInstance = 'http://127.0.0.1:3000/'
+export const ApiInstance = process.env.VUE_APP_INSTANCE

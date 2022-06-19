@@ -29,7 +29,7 @@ class PaymentService {
 			},
 			confirmation: {
 				type: 'redirect',
-				return_url: '/',
+				return_url: 'http://creategood.ru.net/profile',
 			},
 			metadata: { id: order.id },
 		}

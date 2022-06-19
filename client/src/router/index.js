@@ -32,12 +32,6 @@ const routes = [
     component: () => import( '../views/Cart.vue')
   },
   {
-    path: '/paypal',
-    name: 'Paypal',
-    meta: {layout: 'main'},
-    component: () => import( '../views/PayPal.vue')
-  },
-  {
     path: '/thanks',
     name: 'Thanks',
     meta: {layout: 'main'},

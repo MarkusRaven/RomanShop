@@ -4,7 +4,7 @@
         <div class="intro">
           <section class="intro__info">
             <h1 class="intro__title">Greate Good</h1>
-            <p class="intro__text appText">Одежда для твоих сладких ножек</p>
+            <p class="intro__text appText">Кроссовки для твоего стиля</p>
             <router-link to="/Tiles">
               <button class="appBtn intro__btn appBtn--meduim">Каталог</button>
             </router-link>

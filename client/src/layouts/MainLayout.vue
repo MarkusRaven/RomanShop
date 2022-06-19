@@ -37,10 +37,10 @@
               <img src="../assets/img/cart.png" alt="" width="30">
               <div class="icon__counter">{{totalItems}}</div> 
             </router-link>
-            <a href="">
+            <a href="https://vk.com/diana_gn">
               <img src="../assets/img/vk.png" alt="" width="30">
             </a>
-            <a href="">
+            <a href="https://vk.com/away.php?to=https%3A%2F%2Finstagram.com%2Fcrea_tegood%3Figshid%3DYmMyMTA2M2Y%3D&cc_key=">
               <img src="../assets/img/inst.png" alt="" width="30">
             </a>
           </div>
@@ -61,8 +61,8 @@
         <div class="mainfooter__politic">
           <p class="mainfooter__politicText">Copyright © 2021 CREATE GOOD. Все права защищены</p>
           <div class="mainfooter__politicWrap">
-            <span class="mainfooter__politicText">мы четкие</span>
-            <span class="mainfooter__politicText">ребята молодцы</span>
+            <span class="mainfooter__politicText">+7 (937) 362-70-24</span>
+            <span class="mainfooter__politicText">Уфа,ул.Островского 16/1</span>
           </div>
         </div>
     </footer>

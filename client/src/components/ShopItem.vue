@@ -3,16 +3,18 @@
 		<div class="shopitem__link">
 			<img :src="`${ApiInstance}${itemInfo.photo}`" alt="" />
 		</div>
-		<h4 class="shopitem__title">{{ itemInfo.name }}</h4>
-		<p class="shopitem__text appText">{{ description }}</p>
-		<div class="shopitem__price">{{ itemInfo.price }} р.</div>
-		<button
-			type="button"
-			class="shopitem__btn appBtn appBtn--outline"
-			@click="addHandler()"
-		>
-			В корзину
-		</button>
+		<div class="shopitem__body">
+			<h4 class="shopitem__title">{{ itemInfo.name }}</h4>
+			<p class="shopitem__text appText">{{ description }}</p>
+			<div class="shopitem__price">{{ itemInfo.price }} р.</div>
+			<button
+				type="button"
+				class="shopitem__btn appBtn appBtn--outline"
+				@click="addHandler()"
+			>
+				В корзину
+			</button>
+		</div>
 	</div>
 </template>
 

@@ -190,9 +190,6 @@ export default {
       loaded: false,
     }
   },
-  mounted(){
-    this.product.price = this.cart.final_price > 0 ? this.cart.final_price : '200'
-  },
   methods: {
     async completeOrder(){
       if(this.cart.cart.length > 0){
@@ -203,9 +200,7 @@ export default {
             obtain: "CDEK"
           })
           
-          const orderId = new FormData
-          orderId.append('id', orderInfo.id)
-          const payInfo = await orderPay(orderId)
+          const payInfo = await orderPay({id: orderInfo.id})
           window.location.href = payInfo.confirmation.confirmation_url
         } catch(e) {
           console.log(e)

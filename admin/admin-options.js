@@ -2,6 +2,7 @@ const productsProperties = require('./products/products.properties')
 const userProperties = require('./users/users.properties')
 
 const Order = require('../models/Order')
+const OrderStatuses = require('../models/OrderStatus')
 const Products = require('../models/Products')
 const ProductTypes = require('../models/ProductTypes')
 const User = require('../models/User')
@@ -17,6 +18,7 @@ const options = {
 	resources: [
 		Order,
 		ProductTypes,
+		OrderStatuses,
 		{
 			resource: User,
 			options: {

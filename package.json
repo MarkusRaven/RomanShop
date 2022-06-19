@@ -4,10 +4,10 @@
 	"description": "serverSide:  online store for roman on express postgre",
 	"main": "index.js",
 	"scripts": {
-		"serve": "nodemon worker.js",
-		"admin": "nodemon admin.js",
+		"serve": "node worker.js",
+		"admin": "node admin.js",
 		"client": "npm run serve --prefix client",
-		"dev": "concurrently \"npm run serve\" \"npm run client\" \"npm run admin\""
+		"dev": "concurrently \"npm run serve\" \"npm run client\""
 	},
 	"keywords": [],
 	"author": "MarkusRaven",
@@ -32,7 +32,9 @@
 		"jsonwebtoken": "^8.5.1",
 		"pg": "^8.7.3",
 		"pg-hstore": "^2.3.4",
+		"react-is": "^18.2.0",
 		"sequelize": "^6.19.0",
+		"tslib": "^2.4.0",
 		"uuid": "^8.3.2"
 	}
 }

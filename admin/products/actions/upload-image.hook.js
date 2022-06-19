@@ -5,7 +5,7 @@ const uuid = require('uuid')
 const after = async (res, req, context) => {
 	const { uploadImage, record } = context
 
-	if (record.isValid()) {
+	if (record.isValid() && uploadImage) {
 		const fileName =
 			'items' + '/' + uuid.v4() + '.' + uploadImage.type.split('/')[1]
 		const filePath = path.resolve('static', fileName)
